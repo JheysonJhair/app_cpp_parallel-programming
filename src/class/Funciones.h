@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <memory>  
-#include "Cliente.h"
+#include "../class/Cliente.h"
 
 // Carga datos del archivo en un vector de Clientes
 void cargarDatos(const std::string& archivo, std::vector<Cliente>& clientes);
@@ -18,4 +18,4 @@ std::shared_ptr<Cliente> buscarClienteEnVector(const std::vector<Cliente>& clien
 // Busca un cliente en el archivo sin paralelismo
 std::shared_ptr<Cliente> buscarClienteEnArchivo(const std::string& archivo, const std::string& ruc);
 
-#endif // FUNCIONES_H
+#endif 

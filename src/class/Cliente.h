@@ -15,4 +15,4 @@ public:
         : ruc(ruc), nombre(nombre), estado(estado), condicion(condicion) {}
 };
 
-#endif // CLIENTE_H
+#endif 

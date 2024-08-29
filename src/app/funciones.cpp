@@ -1,4 +1,4 @@
-#include "funciones.h"
+#include "../class/Funciones.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>

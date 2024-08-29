@@ -2,10 +2,10 @@
 #include <vector>
 #include <thread>
 #include <memory>
-#include "Cliente.h"
-#include "funciones.h"
+#include "../class/Funciones.h"
+#include "../class/Cliente.h"
 
-const int NUM_THREADS = 4; // Número de hilos a utilizar
+const int NUM_THREADS = 4; 
 
 void buscarConHilos(const std::string& archivo, const std::string& ruc) {
     std::vector<Cliente> clientes;
@@ -60,15 +60,19 @@ void buscarSinParalelismo(const std::string& archivo, const std::string& ruc) {
 }
 
 int main() {
-    std::string archivo = "Otros/padron_reducido_ruc.txt";
+    std::string archivo = "../data/padron_reducido_ruc.txt";
     
     while (true) {
-        std::cout << "Seleccione una opción:" << std::endl;
-        std::cout << "1. Buscar datos de un cliente usando hilos" << std::endl;
-        std::cout << "2. Buscar datos de un cliente usando programacion funcional en un vector" << std::endl;
-        std::cout << "3. Buscar datos de un cliente sin paralelismo (optimizacion)" << std::endl;
-        std::cout << "4. Salir" << std::endl;
-        
+        std::cout << "===========================================================================" << std::endl;
+        std::cout << "|                             MENU PRINCIPAL                              |" << std::endl;
+        std::cout << "===========================================================================" << std::endl;
+        std::cout << "|1. Buscar datos de un cliente usando hilos                               |" << std::endl;
+        std::cout << "|2. Buscar datos de un cliente usando programacion funcional en un vector |" << std::endl;
+        std::cout << "|3. Buscar datos de un cliente sin paralelismo (optimizacion)             |" << std::endl;
+        std::cout << "|-------------------------------------------------------------------------|" << std::endl;
+        std::cout << "|4. Salir                                                                 |" << std::endl;
+        std::cout << "|-------------------------------------------------------------------------|" << std::endl;
+
         int opcion;
         std::cin >> opcion;
         
