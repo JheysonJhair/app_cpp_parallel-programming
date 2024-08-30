@@ -1,4 +1,3 @@
-#include "../class/Funciones.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -6,8 +5,11 @@
 #include <mutex>
 #include <algorithm>
 
+#include "../class/Funciones.h"
+
 std::mutex resultadoMutex;
 
+// Cargar el archivo
 void cargarDatos(const std::string& archivo, std::vector<Cliente>& clientes) {
     std::ifstream file(archivo);
     std::string linea;
@@ -40,6 +42,7 @@ void cargarDatos(const std::string& archivo, std::vector<Cliente>& clientes) {
     file.close();
 }
 
+// Funcion de busqueda sobre un rango determinado
 void buscarClienteEnRango(const std::vector<Cliente>& clientes, const std::string& ruc, int start, int end, std::shared_ptr<Cliente>& resultado) {
     for (int i = start; i < end; ++i) {
         if (clientes[i].ruc == ruc) {
@@ -52,6 +55,7 @@ void buscarClienteEnRango(const std::vector<Cliente>& clientes, const std::strin
     }
 }
 
+// Programación Funcional
 std::shared_ptr<Cliente> buscarClienteEnVector(const std::vector<Cliente>& clientes, const std::string& ruc) {
     auto it = std::find_if(clientes.begin(), clientes.end(), [&ruc](const Cliente& cliente) {
         return cliente.ruc == ruc;
@@ -64,6 +68,7 @@ std::shared_ptr<Cliente> buscarClienteEnVector(const std::vector<Cliente>& clien
     return nullptr;
 }
 
+// Función para Buscar sin Paralelismo
 std::shared_ptr<Cliente> buscarClienteEnArchivo(const std::string& archivo, const std::string& ruc) {
     std::ifstream file(archivo);
     std::string linea;

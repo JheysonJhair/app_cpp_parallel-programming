@@ -2,11 +2,13 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <windows.h>  
+
 #include "../class/Funciones.h"
 #include "../class/Cliente.h"
 
 const int NUM_THREADS = 4; 
-
+//------------------------------------------------------------------------------------- BUSCAR CON HILOS Y ASIGNACION DE NUCLEOS
 void buscarConHilos(const std::string& archivo, const std::string& ruc) {
     std::vector<Cliente> clientes;
     cargarDatos(archivo, clientes);
@@ -20,7 +22,12 @@ void buscarConHilos(const std::string& archivo, const std::string& ruc) {
         int start = i * chunkSize;
         int end = (i == NUM_THREADS - 1) ? numClientes : (i + 1) * chunkSize;
         
-        threads.emplace_back([&clientes, &ruc, start, end, &resultado]() {
+        threads.emplace_back([&, i, start, end]() {
+
+            HANDLE thread = GetCurrentThread();
+            DWORD_PTR mask = 1 << (i % std::thread::hardware_concurrency());
+            SetThreadAffinityMask(thread, mask);
+
             buscarClienteEnRango(clientes, ruc, start, end, resultado);
         });
     }
@@ -36,6 +43,7 @@ void buscarConHilos(const std::string& archivo, const std::string& ruc) {
     }
 }
 
+//------------------------------------------------------------------------------------- BUSCAR CON VECTOR Y PROGRAMACION FUNCIONAL
 void buscarConVector(const std::string& archivo, const std::string& ruc) {
     std::vector<Cliente> clientes;
     cargarDatos(archivo, clientes);
@@ -49,6 +57,7 @@ void buscarConVector(const std::string& archivo, const std::string& ruc) {
     }
 }
 
+//------------------------------------------------------------------------------------- BUSCAR SIN PARALELISMO
 void buscarSinParalelismo(const std::string& archivo, const std::string& ruc) {
     std::shared_ptr<Cliente> resultado = buscarClienteEnArchivo(archivo, ruc);
     
@@ -59,19 +68,20 @@ void buscarSinParalelismo(const std::string& archivo, const std::string& ruc) {
     }
 }
 
+//------------------- MAIN
 int main() {
     std::string archivo = "../data/padron_reducido_ruc.txt";
     
     while (true) {
-        std::cout << "===========================================================================" << std::endl;
-        std::cout << "|                             MENU PRINCIPAL                              |" << std::endl;
-        std::cout << "===========================================================================" << std::endl;
-        std::cout << "|1. Buscar datos de un cliente usando hilos                               |" << std::endl;
-        std::cout << "|2. Buscar datos de un cliente usando programacion funcional en un vector |" << std::endl;
-        std::cout << "|3. Buscar datos de un cliente sin paralelismo (optimizacion)             |" << std::endl;
-        std::cout << "|-------------------------------------------------------------------------|" << std::endl;
-        std::cout << "|4. Salir                                                                 |" << std::endl;
-        std::cout << "|-------------------------------------------------------------------------|" << std::endl;
+        std::cout << "==============================================================================================" << std::endl;
+        std::cout << "|                                        MENU PRINCIPAL                                      |" << std::endl;
+        std::cout << "==============================================================================================" << std::endl;
+        std::cout << "|1. Buscar datos de un cliente usando hilos y asignación de tareas a núcleos del procesador. |" << std::endl;
+        std::cout << "|2. Buscar datos de un cliente usando programacion funcional en un vector.                   |" << std::endl;
+        std::cout << "|3. Buscar datos de un cliente sin paralelismo (optimizacion).                               |" << std::endl;
+        std::cout << "|--------------------------------------------------------------------------------------------|" << std::endl;
+        std::cout << "|4. Salir                                                                                    |" << std::endl;
+        std::cout << "|--------------------------------------------------------------------------------------------|" << std::endl;
 
         int opcion;
         std::cin >> opcion;
